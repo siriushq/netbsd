@@ -21,35 +21,29 @@ jobs:
           echo "First run: cloning full NetBSD src"
           git clone --mirror https://github.com/netbsd/src.git netbsd-src
 
-      - name: clone mirrored repository
-        run: |
-          rm -rf filtered
-          git clone netbsd-src filtered
-
-      - name: configure identity for git
-        run: |
-
       - name: configure identity for git, and restore workflow file to master
         run: |
           git config --global user.name "siriushq-aggregate[bot]"
           git config --global user.email "siriushq-aggregate[bot]@users.noreply.github.com"
 
-          mkdir -p filtered/.github/workflows/
-          cp .github/workflows/mirror.yml filtered/.github/workflows/mirror.yml
+          cp .github/workflows/mirror.yml /tmp/mirror.yml
 
-          cd filtered
+          git remote add upstream netbsd-src
+          git fetch upstream
+          git checkout -B master upstream/master
+
+          mkdir -p .github/workflows
+          cp /tmp/mirror.yml .github/workflows/mirror.yml
+
           git add .github/workflows/mirror.yml
           git commit -m $'restore workflow
 
           Co-authored-by: Mahied Maruf <contact@mechite.com>
           Co-authored-by: Enzo van der Tuin <enzo.van.der.tuin@siriushq.org>
           Signed-off-by: siriushq-aggregate <siriushq-aggregate[bot]@users.noreply.github.com>'
-          cd ..
 
       - name: force push to master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd filtered
-          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}"
           git push origin HEAD:master --force
