@@ -30,7 +30,7 @@ jobs:
 
           git remote add upstream netbsd-src
           git fetch upstream
-          git checkout -B master upstream/master
+          git checkout -B master upstream/trunk
 
           mkdir -p .github/workflows
           cp /tmp/mirror.yml .github/workflows/mirror.yml
