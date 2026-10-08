@@ -11,5 +11,4 @@ for kernel developers and users, the formatted guide is available at:
 
 This repository is maintained to provide a Git workflow for forks and
 other projects that depend on the NetBSD source tree.  The `trunk`
-branch is the exclusive tracking-branch for every other branch inside
-this repository.
+branch is the exclusive tracking-branch for every dependent.
